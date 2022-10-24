@@ -1,6 +1,6 @@
 import { Paper, Toolbar, Typography, useScrollTrigger } from "@mui/material";
 
-const Navbar = ({room, username}) => {
+const Navbar = ({room, username, avatar}) => {
     const trigger = useScrollTrigger({
         disableHysteresis: true,
         threshold: 0,
@@ -16,9 +16,12 @@ const Navbar = ({room, username}) => {
                 <Typography component="h5" variant="h5" sx={{ gridColumn: '1/2' }}>
                     {room}
                 </Typography>
-                <Typography component='h6' variant = 'h6' sx={{ gridColumn: '2/3', textAlign: 'center' }}>
-                    {username}
-                </Typography>
+                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+                    <img src={avatar} alt={username} style={{height:'3em', width: '3em'}}/>
+                    <Typography component='h6' variant = 'h6' sx={{ gridColumn: '2/3', textAlign: 'center'}}>
+                        {username}
+                    </Typography>
+                </div>
             </Toolbar>
         </Paper>
     );

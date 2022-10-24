@@ -1,14 +1,18 @@
-import { Avatar, Card, CardContent, CardHeader, Typography } from '@mui/material';
 import React from 'react';
+import TimeAgo from 'timeago-react';
+import { Paper, Typography } from '@mui/material';
 import { MSG_TYPES } from '../helpers/constants';
+import UserAvatar from './UserAvatar';
 
 
-const MessageCard = ({ roomEvents, messages, currentUser }) => {
+const MessageCard = ({ roomEvents, messages, currentUser, avatars }) => {
     if (messages.length === 0) {
         return (
-            <Card sx={{ boxShadow: "none", position: 'absolute', bottom: 0}}>
-                <CardHeader style={{ textAlign: 'center' }} subheader={"Start messaging! 🎉"} />
-            </Card>
+            <Paper elevation={0} sx={{position: 'absolute', bottom: 0}}>
+                <Typography component="p" variant="caption" style={{ textAlign: 'center' }}>
+                    {"Start messaging! 🎉"}
+                </Typography>
+            </Paper>
         );
     }
 
@@ -17,41 +21,36 @@ const MessageCard = ({ roomEvents, messages, currentUser }) => {
             const isCurrentUser = currentUser === roomEvent.username;
 
             if (roomEvent.msg_type === MSG_TYPES.JOINED) {
-                return <Typography component="p" variant="body2" key={idx}>{roomEvent.username} is in the chat! 🎉</Typography>
+                return <Typography component="p" variant="body2" key={idx} sx={{ my: 2 }}>{roomEvent.username} is in the chat! 🎉</Typography>
             }
             return (
-                <Card sx={{
+                <Paper sx={{
                         display: 'flex',
                         flexDirection: 'row',
-                        maxWidth: "55%",
                         alignSelf: 'flex-start',
-                        m: 2,
+                        alignItems: 'center',
+                        justifyContent: isCurrentUser ? 'flex-end' : 'flex-start',
+                        mx: 2,
+                        my: .2,
                         boxShadow: 'none', 
-                        ml: isCurrentUser ? "auto" : "none",
+                        ml: isCurrentUser ? "auto" : 2,
                     }} 
                     key={idx}
                 >
-                    <CardHeader
-                        sx = {{
+                    <UserAvatar username={roomEvent.username} avatar={avatars[roomEvent.username]} sx={{order: isCurrentUser ? 1 : 0, }}/>
+                    <Paper sx={{
+                            p: 1.5,
+                            mx: .5,
+                            overflowWrap: 'break-word',
                             bgcolor: isCurrentUser ? "#2196F3" : "#9E9E9E",
-                            order: isCurrentUser ? 1 : 0,
-                        }}
-                        avatar={
-                            <Avatar sx={{ backgroundColor: isCurrentUser ? 'blue': 'red'}}>
-                                R
-                            </Avatar>
-                        }
-                        title={roomEvent.username}
-                        subheader={roomEvent.timestamp}
-                    />
-                    <CardContent
-                        sx = {{
-                            bgcolor: isCurrentUser ? "#64B5F6" : "#E0E0E0"
                         }}
                     >
-                        {roomEvent.message}
-                    </CardContent>
-                </Card>
+                        <Typography component="p" variant="body1">{roomEvent.message}</Typography>
+                    </Paper>
+                    <Typography component="p" variant="caption" sx={{ alignSelf: 'flex-end', order: isCurrentUser ? -1 : 1, pb: .5}}>
+                        <TimeAgo datetime={roomEvent.timestamp}/>
+                    </Typography>
+                </Paper>
             );
         })
     );

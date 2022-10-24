@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
 
 import JoinRoom from './pages/JoinRoom.js';
 import Chatroom from './pages/Chatroom.js'
-import { MSG_TYPES } from './helpers/constants.js';
-
+import { SERVER_URL, MSG_TYPES } from './helpers/constants.js';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -19,10 +18,21 @@ const App = () => {
   const [messages, setMessages] = useState([]);
   const [roomEvents, setRoomEvents] = useState([]);
 
+  const avatars = useMemo(() => {
+    let newAvatars = {};
+    const users = [...new Set(roomEvents.map(roomEvent => roomEvent.username))];
+    console.log(users);
+    users.forEach((user) => {
+      newAvatars[user] = `https://avatars.dicebear.com/api/personas/${user}.svg`;
+    });
+    return newAvatars;
+    
+  }, [roomEvents]);
+
   useEffect(() => {
     if (!isLoggedIn || userID > 0) return;
     
-    const newClient = new W3CWebSocket('ws://127.0.0.1:8000/ws/chat/' + roomName + '/');
+    const newClient = new W3CWebSocket(`wss://${SERVER_URL}/ws/chat/` + roomName + '/');
     newClient.onopen = () => {
       console.log("Websocket connected!");
       setClient(newClient);
@@ -125,6 +135,7 @@ const App = () => {
         username={username}
         roomEvents={roomEvents}
         messages={messages} 
+        avatars={avatars}
         onButtonClicked={sendMessage}
       /> 
     </Container>

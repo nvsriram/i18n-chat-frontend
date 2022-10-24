@@ -13,7 +13,7 @@ import MessageCard from '../components/MessageCard';
 import Navbar from '../components/Navbar';
 
 
-const Chatroom = ({room, userID, username, roomEvents, messages, onButtonClicked}) => {
+const Chatroom = ({room, userID, username, roomEvents, messages, avatars, onButtonClicked}) => {
 
     const setValue = (input) => {
         onButtonClicked(input["Message"].value);
@@ -27,13 +27,13 @@ const Chatroom = ({room, userID, username, roomEvents, messages, onButtonClicked
                 height: '100%',
                 flexDirection: 'column',
                 alignItems: 'center',
-                overflowY: "auto"
+                overflowY: "scroll",
             }}
         >
-            <Navbar room={room} username={username} />
-            <Paper variant="outlined" sx={{ display:'flex', flexDirection: 'column', flexGrow: 1, height:'100%', width: "100%", justifyContent: 'flex-end', pb: 1, mb: 3, overflowY: "scroll" }}>
-                <Paper elevation={0} sx={{ position:'relative', display: 'flex', flexDirection: 'column', flexGrow: 1, height: '100%', width: "100%", justifyContent: 'flex-end', alignItems: 'center'}}>
-                    <MessageCard roomEvents={roomEvents} messages={messages} currentUser={username} />
+            <Navbar room={room} username={username} avatar={avatars[username]}/>
+            <Paper variant="outlined" sx={{ display:'flex', flexDirection: 'column', height:'100%', width: "100%", justifyContent: 'flex-end', pb: 1, mb: 3 }}>
+                <Paper elevation={0} sx={{ position:'relative', display: 'flex', flexDirection: 'column', width: "100%", justifyContent: 'flex-end', alignItems: 'center'}}>
+                    <MessageCard roomEvents={roomEvents} messages={messages} currentUser={username} avatars={avatars} />
                 </Paper>
                 <InputForm 
                     onSubmit={setValue} 
