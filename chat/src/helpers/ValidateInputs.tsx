@@ -1,4 +1,4 @@
-export const validateInputs = (inputName, input) => {
+export const validateInputs = (inputName: string, input: string) : string | null => {
     switch (inputName) {
         case "Room Name":
             if (!input) {

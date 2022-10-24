@@ -1,6 +1,7 @@
+import React from 'react';
 import { Paper, Toolbar, Typography, useScrollTrigger } from "@mui/material";
 
-const Navbar = ({room, username, avatar}) => {
+const Navbar: React.FC<{room: string, username: string, avatar: string}> = ({room, username, avatar}) => {
     const trigger = useScrollTrigger({
         disableHysteresis: true,
         threshold: 0,

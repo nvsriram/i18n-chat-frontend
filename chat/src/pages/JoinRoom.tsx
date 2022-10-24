@@ -7,11 +7,17 @@ import InputForm from '../components/InputForm';
 import TextInput from '../components/TextInput';
 import { validateInputs } from '../helpers/ValidateInputs';
 
-const JoinRoom = (props) => {
-    const setValues = (values) => {
-        props.setRoomName(values["Room Name"].value);
-        props.setUsername(values["Username"].value);
-        props.setIsLoggedIn(true);
+type setFunction<T> = (value: T) => void;
+
+const JoinRoom: React.FC<{ 
+        setRoomName: setFunction<string>, 
+        setUsername: setFunction<string>, 
+        setIsLoggedIn: setFunction<boolean>
+    }> = ({ setRoomName, setUsername, setIsLoggedIn }) => {
+    const setValues = (values: { [key: string]: { value: string } }) => {
+        setRoomName(values["Room Name"].value);
+        setUsername(values["Username"].value);
+        setIsLoggedIn(true);
     };
 
     return (

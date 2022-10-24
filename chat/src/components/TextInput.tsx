@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import { useFormContext } from '../helpers/FormContext';
+import { ITextInput } from '../helpers/types';
 
-
-const TextInput = (props) => {
+const TextInput = (props: ITextInput) => {
     const formContext = useFormContext();
   
     useEffect(() => {
@@ -22,14 +22,14 @@ const TextInput = (props) => {
             type={props.type}
             error={!props.removeHelperText && formContext.inputs[props.name] && formContext.inputs[props.name].invalid}
             helperText=
-                {props.removeHelperText ? '' :
-                    ([props.name] in formContext.inputs && formContext.inputs[props.name].invalid) ?
+                {props.removeHelperText! ? '' :
+                    (props.name in formContext.inputs && formContext.inputs[props.name].invalid) ?
                     formContext.inputs[props.name].invalidMsg
                     : ' '
                 }
             placeholder={props.placeholder}
             autoFocus={props.autoFocus}
-            value={([props.name] in formContext.inputs) ?
+            value={(props.name in formContext.inputs) ?
                 formContext.inputs[props.name].value
                 : ''}
                 onChange={formContext.onChange}

@@ -3,9 +3,10 @@ import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
 
-import JoinRoom from './pages/JoinRoom.js';
-import Chatroom from './pages/Chatroom.js'
-import { SERVER_URL, MSG_TYPES } from './helpers/constants.js';
+import JoinRoom from './pages/JoinRoom';
+import Chatroom from './pages/Chatroom'
+import { SERVER_URL } from './helpers/constants';
+import { IAvatar, IMessage, IRoomEvent, MSG_TYPES } from './helpers/types';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -13,13 +14,13 @@ const App = () => {
   const [userID, setUserID] = useState(-1);
   const [username, setUsername] = useState('');
   const [lang, setLang] = useState('EN');
-  const [client, setClient] = useState(null);
+  const [client, setClient] = useState<any>(null);
 
-  const [messages, setMessages] = useState([]);
-  const [roomEvents, setRoomEvents] = useState([]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [roomEvents, setRoomEvents] = useState<IRoomEvent[]>([]);
 
-  const avatars = useMemo(() => {
-    let newAvatars = {};
+  const avatars: IAvatar = useMemo(() => {
+    let newAvatars: IAvatar = {};
     const users = [...new Set(roomEvents.map(roomEvent => roomEvent.username))];
     console.log(users);
     users.forEach((user) => {
@@ -45,7 +46,7 @@ const App = () => {
       }
     };
 
-    newClient.onmessage = (message) => {
+    newClient.onmessage = (message: any) => {
       const dataFromServer = JSON.parse(message.data);
       if (dataFromServer) {
         const {
@@ -70,7 +71,6 @@ const App = () => {
               ]
             );
             if (userID === -1) {
-              console.log(user_id);
               setUserID(user_id);
             }
             break;         
@@ -81,7 +81,7 @@ const App = () => {
                   msg_type: msg_type,
                   message: message,
                   timestamp: timestamp,
-                  userID: user_id,
+                  user_id: user_id,
                   username: username,
                   lang: lang,
                 }
@@ -106,7 +106,7 @@ const App = () => {
 
   }, [isLoggedIn, lang, username, roomName, userID]);
 
-  const sendMessage = (input) => {
+  const sendMessage = (input: string) => {
     client.send(JSON.stringify({
       msg_type: MSG_TYPES.MESSAGE,
       message: input,

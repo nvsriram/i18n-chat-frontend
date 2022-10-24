@@ -1,12 +1,15 @@
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
-import { FormProvider } from '../helpers/FormContext';
 
-const InputForm = (props) => {
-    const [inputs, setInputs] = useState({});
+import { FormProvider } from '../helpers/FormContext';
+import { IFormInputs } from '../helpers/types';
+
+
+const InputForm = (props: any) => {
+    const [inputs, setInputs] = useState<IFormInputs>({});
     const [isValid, setIsValid] = useState(0);
   
-    const setInputInitialState = (inputName, initialValue = '') => {
+    const setInputInitialState = (inputName: string, initialValue = '') => {
         const INITIAL_INPUT_STATE = {
             invalid: false,
             invalidMsg: null,
@@ -24,7 +27,7 @@ const InputForm = (props) => {
         });
     };
     
-    const onChange = (event) => {
+    const onChange: (event: React.ChangeEvent<HTMLInputElement>) => void = (event) => {
         const newValue = event.target.value;
         const inputName = event.target.name;
         let is_valid = 0;
@@ -65,7 +68,7 @@ const InputForm = (props) => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const is_valid = handleIsValid();
         if (is_valid === 0) {
